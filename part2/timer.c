@@ -7,6 +7,10 @@
 
 static int time_data __initdata = 3;
 
+static void current_kernel_time(void){
+    printk(KERN_INFO "in current_kernel_time()");
+}
+
 static int __init my_timer_init(void)
 {
 	printk(KERN_INFO "Starting timer\n");
