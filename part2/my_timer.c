@@ -21,7 +21,11 @@ static struct timespec *ts;
 
 static time64_t current_kernel_time(void)
 {
+    printk(KERN_DEBUG "in current_kernel_time\n");
+    char buf[BUFSIZE];
+
     time64_t ret = ktime_get_seconds();
+    sprintf(buf, BUFSIZE, "current time: %f\n");
     return ret;
 }
 
@@ -52,7 +56,8 @@ static ssize_t mywrite(struct file *file, const char __user *ubuf, size_t count,
 
 static int myopen(struct inode *inode, struct file *file)
 {
-    printk(KERN_INFO "Im gonna jump off a cliff\n");
+    printk(KERN_INFO "open handler\n");
+    current_kernel_time();
     return 0;
 }
 
