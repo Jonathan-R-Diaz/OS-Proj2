@@ -6,6 +6,8 @@
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 
+#include <linux/ktime.h>
+
 #include <linux/time64.h>
 #include <linux/timekeeping.h>
 
@@ -17,17 +19,18 @@
 #define BUFSIZE 256
 
 static struct proc_dir_entry *entry;
-static struct timespec *ts;
 
+/*
 static time64_t current_kernel_time(void)
 {
-    printk(KERN_DEBUG "in current_kernel_time\n");
+    printk(KERN_DEBUG "in current_kernel_time()\n");
     char buf[BUFSIZE];
 
     time64_t ret = ktime_get_seconds();
-    sprintf(buf, BUFSIZE, "current time: %f\n");
+    printk(KERN_DEBUG "leaving current_kernel_time()\n");
     return ret;
 }
+*/
 
 static ssize_t myread(struct file *file, char *ubuf, size_t count, loff_t *ppos)
 {
@@ -35,16 +38,27 @@ static ssize_t myread(struct file *file, char *ubuf, size_t count, loff_t *ppos)
     int len = 0;
     printk(KERN_DEBUG "read handler\n");
 
-    if(*ppos > 0 || count < BUFSIZE) return 0;
+    if(*ppos > 0 || count < BUFSIZE){
+        if (*ppos > 0){
+            printk(KERN_DEBUG "*ppos > 0\n");
+        }
+        if (count < BUFSIZE){
+            printk(KERN_DEBUG "count < BUFSIZE\n");
+        }
+        return 0;
+    }
 
-    //len += sprintf(buf, "irq = %d\n", irq);
-    //len += sprintf(buf + len, "mode = %d\n", mode);
+    struct timespec64 *ts;
+    // ts = current_kernel_time();
+    ktime_get_ts64(ts);
+    len += sprintf(buf, "current time: %lld.%ld\n", ts->tv_sec, ts->tv_nsec);
 
     if (copy_to_user(ubuf, buf, len))
         return -EFAULT;
 
     *ppos = len;
 
+    printk(KERN_DEBUG "leaving reader handler\n");
     return len;
 }
 
@@ -56,8 +70,8 @@ static ssize_t mywrite(struct file *file, const char __user *ubuf, size_t count,
 
 static int myopen(struct inode *inode, struct file *file)
 {
-    printk(KERN_INFO "open handler\n");
-    current_kernel_time();
+    char buf[BUFSIZE];
+    printk(KERN_DEBUG "open handler\n");
     return 0;
 }
 
@@ -71,6 +85,7 @@ static struct proc_ops myops =
 static int __init my_timer_init(void)
 {
 	entry = proc_create(PROC_NAME, 0660, NULL, &myops);
+    printk(KERN_INFO "=========================");
     printk(KERN_INFO "/proc/%s created\n", PROC_NAME);
     return 0;
 }
@@ -78,7 +93,7 @@ static int __init my_timer_init(void)
 static void __exit my_timer_exit(void)
 {
 	printk(KERN_INFO "elapsed time: \n");
-    printk(KERN_INFO "/proc/%s deleted\n", PROC_NAME);
+    printk(KERN_INFO "/proc/%s DELETED\n", PROC_NAME);
     proc_remove(entry);
 }
 
