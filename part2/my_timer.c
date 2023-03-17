@@ -18,6 +18,8 @@
 #define PROC_NAME "timer"
 #define BUFSIZE 256
 
+struct timespec64 *past;
+
 static struct proc_dir_entry *entry;
 
 /*
@@ -48,11 +50,17 @@ static ssize_t myread(struct file *file, char *ubuf, size_t count, loff_t *ppos)
         return 0;
     }
 
-    struct timespec64 *ts;
-    // ts = current_kernel_time();
-    ktime_get_ts64(ts);
-    len += sprintf(buf, "current time: %lld.%ld\n", ts->tv_sec, ts->tv_nsec);
+    struct timespec64 now;
+    ktime_get_ts64(&now);
 
+    if (past -> tv_sec == 0){
+        past -> tv_sec = now.tv_sec;
+        past -> tv_nsec = now.tv_nsec;
+        len += sprintf(buf, "current time: %lld.%lld\n", (long long)now.tv_sec, (long long)now.tv_nsec);
+    }
+    else {
+        len += sprintf(buf, "current time: %lld.%lld\nelapsed time: %lld.%lld\n" , (long long)(now.tv_sec), (long long)(now.tv_nsec), (long long)(now.tv_sec - past -> tv_sec), (long long)(now.tv_nsec - past -> tv_nsec)); 
+    }
     if (copy_to_user(ubuf, buf, len))
         return -EFAULT;
 
