@@ -15,4 +15,5 @@
 
 //Initalization of elevator
 
+#include "printfunctions.c"
 #include "proc_ops.c"
