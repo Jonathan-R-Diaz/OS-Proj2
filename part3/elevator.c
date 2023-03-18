@@ -6,16 +6,13 @@
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 
-#include "elevator.c"
-
 #define DRIVER_LICENSE "GPL"
 #define DRIVER_AUTHOR "Jonathan Diaz <jrd17j@fsu.edu>"
 #define DRIVER_DESC   "Elevator Module"
 
 #define PROC_NAME "elevator"
-#define BUFSIZE 256
+#define BUFSIZE 4098
 
 //Initalization of elevator
 
 #include "proc_ops.c"
-#include "printfunctions.c"

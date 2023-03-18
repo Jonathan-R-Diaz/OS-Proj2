@@ -1,4 +1,3 @@
-
 static struct proc_dir_entry *entry;
 
 static ssize_t myread(struct file *file, char *ubuf, size_t count, loff_t *ppos)
@@ -8,6 +7,26 @@ static ssize_t myread(struct file *file, char *ubuf, size_t count, loff_t *ppos)
     printk(KERN_DEBUG "read handler\n");
 
     if(*ppos > 0 || count < BUFSIZE){ return 0; }
+    
+    len += snprintf(buf, BUFSIZE, "Elevator state: _\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    len += snprintf(buf, BUFSIZE - len, "Current floor: _\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    len += snprintf(buf, BUFSIZE - len, "Current weight: _\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    len += snprintf(buf, BUFSIZE - len, "Elevator status: _\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    len += snprintf(buf, BUFSIZE - len, "Number of passengers: _\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    len += snprintf(buf, BUFSIZE - len, "Number of passengers waiting: _\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    len += snprintf(buf, BUFSIZE - len, "Number passengers serviced: _\n\n");
+    printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    
+    for (int i = 10; i > 0; i--){
+        len += snprintf(buf, BUFSIZE - len, "[ ] Floor %d:\n", i);
+        printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
+    }
 
     if (copy_to_user(ubuf, buf, len))
         return -EFAULT;
