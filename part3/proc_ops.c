@@ -11,7 +11,7 @@ static ssize_t myread(struct file *file, char *ubuf, size_t count, loff_t *ppos)
     len = printElevator(buf);
 
     // Kernel space to user space
-    if (copy_to_user(ubuf, buf, len));
+    if (copy_to_user(ubuf, buf, len))
         return -EFAULT;
 
     *ppos = len;
@@ -34,6 +34,7 @@ static struct proc_ops myops =
 static int __init elevator_init(void)
 {
 	entry = proc_create(PROC_NAME, 0660, NULL, &myops);
+    init();
     printk(KERN_INFO "/proc/%s created\n", PROC_NAME);
     return 0;
 }
