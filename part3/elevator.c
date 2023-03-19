@@ -16,7 +16,8 @@
 #define MAX_FLOORS 10
 #define MAX_WEIGHT 100
 
-//Passengers
+
+// Passengers
 struct passenger {
     char type;
     int dest;
@@ -28,10 +29,10 @@ struct passenger_list{
     struct passenger *first;  
 };
 
-//Floors
+// Floors
 struct passenger_list floors[MAX_FLOORS];
 
-//Elevator
+// Elevator
 enum STATES {OFFLINE, IDLE, LOADING, UP, DOWN};
 unsigned int STATE;
 unsigned int FLOOR = 0;
@@ -40,16 +41,17 @@ struct passenger_list elevator_list;
 unsigned int PASSENGERS = 0;
 unsigned int SERVICED = 0;
 
+#include "mylist.c"
 
 void init(void){
     STATE = OFFLINE;
-
+    
     // Elevator list initializer
-    elevator_list.first = NULL;
+    list_init(&elevator_list);
     
     // Floors array initializer
     for (int i = 0; i < MAX_FLOORS; i++){
-        floors[i].first = NULL;
+        list_init(&floors[i]);
     }
 }
 
