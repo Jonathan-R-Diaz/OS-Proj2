@@ -74,14 +74,18 @@ static ssize_t printElevator(char* buf){
     
     // Floors
     for (int i = MAX_FLOORS - 1; i >= 0; i--){
+        printk(KERN_DEBUG "TOP OF FOR LOOP len: %d\n", len);
         //Implement this too
         if (i == FLOOR)
             len += snprintf(buf + len, BUFSIZE - len, "[*] Floor %d: %d ", i, size(&floors[i]));
         else
             len += snprintf(buf + len, BUFSIZE - len, "[ ] Floor %d: %d ", i, size(&floors[i]));
         //Implement this
-        //len += printList(buf, len, &floors[i]);
+        printk(KERN_DEBUG "len before printList (leaving FOR LOOP): %d\n", len);
+        len += printList(buf, len, &floors[i]);
+        printk(KERN_DEBUG "len after printList: %d\n", len);
         len += snprintf(buf + len, BUFSIZE - len, "\n");
+        printk(KERN_DEBUG "len end: %d\n", len);
         //printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
     }
 
