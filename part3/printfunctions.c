@@ -36,13 +36,12 @@ static ssize_t printStat(char* buf, int len, char* str, int num){
     return snprintf(buf + len, BUFSIZE - len, "%s: %d\n", str, num);
 }
 
-static ssize_t printList(char* buf, int len, struct passenger* start){
-
-    struct passenger* curr = start -> next;
-    while(curr -> type != 'E'){
-        len += snprintf(buf + len, BUFSIZE - len, "%c", curr -> type);
-        if (curr -> next -> type != 'E')
-            len += snprintf(buf + len, BUFSIZE - len, ", ");
+static ssize_t printList(char* buf, int len, struct passenger_list* start){
+    struct passenger* curr = start -> first;
+    curr = curr -> next;
+    while(curr != NULL && curr -> type != 'E'){
+        len += snprintf(buf + len, BUFSIZE - len, "%c ", curr -> type);
+        curr = curr -> next;
     }
     return len;
 }
@@ -69,10 +68,18 @@ static ssize_t printElevator(char* buf){
     
     // Floors
     for (int i = MAX_FLOORS - 1; i >= 0; i--){
-        len += snprintf(buf + len, BUFSIZE - len, "[ ] Floor %d: %d ", i, size(&floors[i]));
+        //Implement this too
+        if (i == FLOOR)
+            len += snprintf(buf + len, BUFSIZE - len, "[*] Floor %d: %d ", i, size(&floors[i]));
+        else
+            len += snprintf(buf + len, BUFSIZE - len, "[ ] Floor %d: %d ", i, size(&floors[i]));
+        //Implement this
+        //len += printList(buf, len, &floors[i]);
         len += snprintf(buf + len, BUFSIZE - len, "\n");
         //printk(KERN_DEBUG "[DEBUG] len: %d, buf: %s", len, buf);
     }
+
+    // Build dudes, test print functions
 
     len += snprintf(buf + len, BUFSIZE - len, "\n");
     
