@@ -37,17 +37,18 @@ static ssize_t printStat(char* buf, int len, char* str, int num){
 }
 
 static ssize_t printList(char* buf, int len, struct passenger_list* start){
-    printk(KERN_DEBUG "in printList()\n");
-    printk(KERN_DEBUG "start len: %d\n", len);
+    //printk(KERN_DEBUG "in printList()\n");
+    //printk(KERN_DEBUG "start len: %d\n", len);
     struct passenger* curr = start -> first;
     curr = curr -> next;
     while(curr != NULL && curr -> type != 'E'){
-        printk(KERN_DEBUG "in loop()------\n");
-        printk(KERN_DEBUG "len before: %d\n", len);
+        //printk(KERN_DEBUG "in loop()------\n");
+        //printk(KERN_DEBUG "len before: %d\n", len);
         len += snprintf(buf + len, BUFSIZE - len, "%c ", curr -> type);
-        printk(KERN_DEBUG "len after: %d\n", len);
+        //printk(KERN_DEBUG "len after: %d\n", len);
         curr = curr -> next;
     }
+    kfree(curr);
     printk(KERN_DEBUG "leaving printList(), end len: %d\n", len); 
     return len;
 }
@@ -82,7 +83,7 @@ static ssize_t printElevator(char* buf){
             len += snprintf(buf + len, BUFSIZE - len, "[ ] Floor %d: %d ", i, size(&floors[i]));
         //Implement this
         printk(KERN_DEBUG "len before printList (leaving FOR LOOP): %d\n", len);
-        len += printList(buf, len, &floors[i]);
+        len = printList(buf, len, &floors[i]);
         printk(KERN_DEBUG "len after printList: %d\n", len);
         len += snprintf(buf + len, BUFSIZE - len, "\n");
         printk(KERN_DEBUG "len end: %d\n", len);
