@@ -18,26 +18,27 @@
 
 
 // Passengers
-struct passenger {
+typedef struct {
     char type;
     int dest;
     int weight;
-    struct passenger* next;
-};
+    struct list_head list;
+} passenger;
 
-struct passenger_list{
-    struct passenger *first;  
-};
+typedef struct {
+    passenger pass;
+    struct list_head list;
+} passenger_list;
 
 // Floors
-struct passenger_list floors[MAX_FLOORS];
+passenger_list floors[MAX_FLOORS];
 
 // Elevator
 enum STATES {OFFLINE, IDLE, LOADING, UP, DOWN};
 unsigned int STATE;
 unsigned int FLOOR = 0;
 unsigned int WEIGHT = 0;
-struct passenger_list elevator_list;
+passenger_list elevator_list;
 unsigned int PASSENGERS = 0;
 unsigned int SERVICED = 0;
 
@@ -47,11 +48,11 @@ void init(void){
     STATE = OFFLINE;
     
     // Elevator list initializer
-    list_init(&elevator_list);
-    
+    LIST_HEAD(&elevator_list);
+     
     // Floors array initializer
     for (int i = 0; i < MAX_FLOORS; i++){
-        list_init(&floors[i]);
+        LIST_HEAD(floors[i]);
     }
 }
 
