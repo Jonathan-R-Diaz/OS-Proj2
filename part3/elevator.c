@@ -18,41 +18,59 @@
 
 
 // Passengers
-typedef struct {
+typedef struct passenger{
     char type;
     int dest;
     int weight;
-    struct list_head list;
-} passenger;
+    struct list_head list_node;
+} passenger_t;
 
-typedef struct {
-    passenger pass;
-    struct list_head list;
-} passenger_list;
-
-// Floors
-passenger_list floors[MAX_FLOORS];
+// Lists
+struct list_head elevator_list;
+struct list_head floors[MAX_FLOORS];
 
 // Elevator
 enum STATES {OFFLINE, IDLE, LOADING, UP, DOWN};
 unsigned int STATE;
 unsigned int FLOOR = 0;
 unsigned int WEIGHT = 0;
-passenger_list elevator_list;
 unsigned int PASSENGERS = 0;
 unsigned int SERVICED = 0;
 
-#include "mylist.c"
 
-void init(void){
+static int init(void){
     STATE = OFFLINE;
     
     // Elevator list initializer
-    LIST_HEAD(&elevator_list);
+    INIT_LIST_HEAD(&elevator_list);
      
     // Floors array initializer
     for (int i = 0; i < MAX_FLOORS; i++){
-        LIST_HEAD(floors[i]);
+        INIT_LIST_HEAD(&floors[i]);
+    }
+    return 0;
+}
+
+static void cleanup_elevator(void){
+    
+    for (int i = 0; i < MAX_FLOORS; i++) {
+        // free each passenger node in each floor
+        struct passenger *pass;
+        struct list_head *pos, *q;
+        list_for_each_safe(pos, q, &floors[i]) {
+            pass = list_entry(pos, struct passenger, list_node);
+            list_del(pos);
+            kfree(pass);
+        }
+    }
+
+    // clean up the elevator list
+    struct passenger *pass;
+    struct list_head *pos, *q;
+    list_for_each_safe(pos, q, &elevator_list) {
+        pass = list_entry(pos, struct passenger, list_node);
+        list_del(pos);
+        kfree(pass);
     }
 }
 

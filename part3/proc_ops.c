@@ -34,9 +34,8 @@ static struct proc_ops myops =
 static int __init elevator_init(void)
 {
 	entry = proc_create(PROC_NAME, 0660, NULL, &myops);
-    init();
     printk(KERN_INFO "/proc/%s created\n", PROC_NAME);
-    return 0;
+    return init();
 }
 
 static void __exit elevator_exit(void)
