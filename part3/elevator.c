@@ -23,7 +23,7 @@ typedef struct passenger{
     int dest;
     int weight;
     struct list_head list_node;
-} passenger_t;
+} passenger;
 
 // Lists
 struct list_head elevator_list;
@@ -37,6 +37,7 @@ unsigned int WEIGHT = 0;
 unsigned int PASSENGERS = 0;
 unsigned int SERVICED = 0;
 
+#include "debug.c"
 
 static int init(void){
     STATE = OFFLINE;
@@ -48,6 +49,8 @@ static int init(void){
     for (int i = 0; i < MAX_FLOORS; i++){
         INIT_LIST_HEAD(&floors[i]);
     }
+
+    testcase1();
     return 0;
 }
 

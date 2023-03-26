@@ -1,10 +1,14 @@
 
-void addLizard(struct passenger_list *list){
-    struct passenger lizard = {.type = 'L', .weight = 5, .dest = 9, };
-    struct passenger* curr = list -> first;
-    curr = curr -> next;
-    while (curr -> next -> type != 'E'){
-        curr = curr -> next;
+void addLizard(struct list_head *head){
+    struct passenger* lizard = kmalloc(sizeof(struct passenger*), GFP_KERNEL);
+    lizard -> type = 'L';
+    lizard -> dest = 100;
+    lizard -> weight = 5;
+    list_add_tail(&lizard -> list_node, head);
+}
+
+void testcase1(void){
+    for (int i = 0; i < MAX_FLOORS; i++){
+        addLizard(&floors[i]);
     }
-    insert(curr, &lizard);
 }
