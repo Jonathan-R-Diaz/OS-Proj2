@@ -14,6 +14,8 @@ char* currentState(int state){
 }
 
 static ssize_t elevator_status(char *buf, int len, struct list_head* head){
+    printk(KERN_DEBUG "in elevator_status()\n");
+
     int l = 0, c = 0, d = 0;
 
     struct passenger *pass;
@@ -29,6 +31,7 @@ static ssize_t elevator_status(char *buf, int len, struct list_head* head){
     }
 
     len += snprintf(buf + len, BUFSIZE - len, "Elevator status: %d L, %d C, %d D\n", l, c, d);
+    printk(KERN_DEBUG "leaving elevator_status()\n");
     return len;
 }
 

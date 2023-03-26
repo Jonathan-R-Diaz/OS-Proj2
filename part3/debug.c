@@ -8,9 +8,9 @@ void addLizard(struct list_head *head){
 }
 
 void testcase1(void){
+    addLizard(&elevator_list);
     for (int i = 0; i < MAX_FLOORS; i++){
         addLizard(&floors[i]);
     }
-    addLizard(&elevator_list);
     printk(KERN_DEBUG "Out of testcase 1\n");
 }
