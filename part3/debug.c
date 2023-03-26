@@ -1,6 +1,6 @@
 
 void addLizard(struct list_head *head){
-    struct passenger* lizard = kmalloc(sizeof(struct passenger*), GFP_KERNEL);
+    struct passenger* lizard = kmalloc(sizeof(struct passenger), GFP_KERNEL);
     lizard -> type = 'L';
     lizard -> dest = 100;
     lizard -> weight = 5;
@@ -11,4 +11,6 @@ void testcase1(void){
     for (int i = 0; i < MAX_FLOORS; i++){
         addLizard(&floors[i]);
     }
+    addLizard(&elevator_list);
+    printk(KERN_DEBUG "Out of testcase 1\n");
 }
