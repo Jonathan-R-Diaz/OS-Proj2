@@ -22,12 +22,12 @@ static ssize_t elevator_status(char *buf, int len, struct list_head* head){
     struct list_head *pos;
 
     list_for_each(pos, head){
-        if (pass -> type == 'L')
-            l++;
-        if (pass -> type == 'C')
-            c++;
-        if (pass -> type == 'D')
-            d++;
+        pass = list_entry(pos, struct passenger, list_node);
+        if (pass != NULL){   
+            if (pass -> type == 'L') l++;
+            if (pass -> type == 'C') c++;
+            if (pass -> type == 'D') d++;
+        }
     }
 
     len += snprintf(buf + len, BUFSIZE - len, "Elevator status: %d L, %d C, %d D\n", l, c, d);
