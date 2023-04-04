@@ -1,7 +1,7 @@
 int rng(int lower, int upper){
     int num;
     get_random_bytes(&num, sizeof(num));
-    int ret = (num % ++upper) + lower;
+    int ret = abs((num % ++upper) + lower);
     printk(KERN_DEBUG "random num: %d\n", ret);
     return ret;
 }
