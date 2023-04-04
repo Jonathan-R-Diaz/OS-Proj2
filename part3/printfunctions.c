@@ -62,7 +62,7 @@ int size(struct list_head* head){
 
 int totalWaiting(void){
     int total = 0;
-    for (int i = 0; i < MAX_FLOORS - 1; i++){
+    for (int i = 0; i < MAX_FLOORS; i++){
         total += size(&floors[i]);
     }
     return total;
