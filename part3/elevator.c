@@ -52,7 +52,6 @@ static int init(void){
         INIT_LIST_HEAD(&floors[i]);
     }
 
-    testcase1();
     testcase2(200);
     return 0;
 }

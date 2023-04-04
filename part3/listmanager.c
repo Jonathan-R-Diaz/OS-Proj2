@@ -52,9 +52,12 @@ struct passenger* int_to_passenger(int type){
         return getCat();
     if (type == 2)
         return getDog();
+    printk(KERN_DEBUG "RETURNING NULL ANIMAL int_to_passenger\n");
     return NULL;
 }
 int issue_processor(int start, int dest, int type){
+    
+    
     struct passenger* animal = int_to_passenger(type);
     floorAssigner(animal, dest);
     
@@ -65,6 +68,10 @@ int issue_processor(int start, int dest, int type){
         list = &floors[--start];
     } 
 
-    addAnimal(animal, list);
+    if (animal != NULL && list != NULL){
+        addAnimal(animal, list);
+    }
+    else
+        printk(KERN_DEBUG "animal or list null\n");
     return 0;
 }

@@ -1,11 +1,14 @@
 int rng(int lower, int upper){
     int num;
     get_random_bytes(&num, sizeof(num));
-    return ((num % ++upper) + lower);
+    int ret = (num % ++upper) + lower;
+    printk(KERN_DEBUG "random num: %d\n", ret);
+    return ret;
 }
 
 void testcase2(int num){
-    
+   
+    printk(KERN_DEBUG "in testcase2\n"); 
     int type;
     int start;
     int dest;
@@ -17,7 +20,7 @@ void testcase2(int num){
         do {
             dest = rng(1, 10);
         } while(dest == start);
-        long ret = issue_processor(start, dest, type);
+        int ret = issue_processor(start, dest, type);
         printk(KERN_DEBUG "Issue (%d, %d, %d) returned %ld\n", start, dest, type, ret);
     }
     printk(KERN_DEBUG "out of testcase(%d)\n", num);
