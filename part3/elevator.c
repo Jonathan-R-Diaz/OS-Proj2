@@ -5,6 +5,7 @@
 #include <linux/proc_fs.h>
 #include <asm/uaccess.h>
 #include <linux/list.h>
+#include <linux/random.h>
 
 #define DRIVER_LICENSE "GPL"
 #define DRIVER_AUTHOR "Jonathan Diaz <jrd17j@fsu.edu>"
@@ -37,7 +38,8 @@ unsigned int WEIGHT = 0;
 unsigned int PASSENGERS = 0;
 unsigned int SERVICED = 0;
 
-#include "debug.c"
+#include "listmanager.c"
+#include "tests.c"
 
 static int init(void){
     STATE = OFFLINE;
@@ -50,7 +52,7 @@ static int init(void){
         INIT_LIST_HEAD(&floors[i]);
     }
 
-    testcase1();
+    testcase2(100);
     return 0;
 }
 
