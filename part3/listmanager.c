@@ -29,6 +29,10 @@ struct passenger* getDog(void){
 }
 
 struct passenger* animalReader(struct passenger* animal){
+    if (animal == NULL){
+        printk(KERN_DEBUG "animal null in animalReader\n");
+        return NULL;
+    }
     if (animal -> type == 'L')
         return floorAssigner(getLizard(), animal -> dest);
     else if (animal -> type == 'C')
@@ -39,4 +43,28 @@ struct passenger* animalReader(struct passenger* animal){
         printk(KERN_DEBUG "NULL in animalReader detected\n");
         return NULL;
     }
+}
+
+struct passenger* int_to_passenger(int type){
+    if (type == 0)
+        return getLizard();
+    if (type == 1)
+        return getCat();
+    if (type == 2)
+        return getDog();
+    return NULL;
+}
+int issue_processor(int start, int dest, int type){
+    struct passenger* animal = int_to_passenger(type);
+    floorAssigner(animal, dest);
+    
+    struct list_head *list;
+    if (start == 0)
+        list = &elevator_list;
+    else {
+        list = &floors[--start];
+    } 
+
+    addAnimal(animal, list);
+    return 0;
 }
