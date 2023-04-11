@@ -78,8 +78,9 @@ int issue_processor(int start, int dest, int type){
 void load_elevator(struct list_head* floor){
     struct passenger *animal, *tmp;
     list_for_each_entry_safe(animal, tmp, floors, list_node){
-        if (WEIGHT + animal -> weight <= 100){
+        if (WEIGHT + animal -> weight <= 100 && PASSENGERS < 10){
             WEIGHT += animal -> weight;
+            PASSENGERS++;
             list_del(&animal -> list_node);
             addAnimal(animal, &elevator_list);
             printk(KERN_DEBUG "Animal added, type: %c, WEIGHT: %d\n", animal -> type, WEIGHT);
@@ -95,6 +96,7 @@ void deload_elevator(int floor){
         printk(KERN_DEBUG "floor: %d\n", floor);
         if (animal -> dest == floor){
             WEIGHT -= animal -> weight;
+            PASSENGERS--;
             list_del(&animal -> list_node);
             printk(KERN_DEBUG "Animal dropped off, Type: %c, Destination: %d\n", animal -> type, animal -> dest);
             SERVICED++;
@@ -102,8 +104,3 @@ void deload_elevator(int floor){
         }
     }
 }
-
-/*
- * DeloadFromElevator();
- * addToElevator();
- */
