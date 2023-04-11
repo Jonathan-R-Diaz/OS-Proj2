@@ -55,9 +55,8 @@ struct passenger* int_to_passenger(int type){
     printk(KERN_DEBUG "RETURNING NULL ANIMAL int_to_passenger\n");
     return NULL;
 }
+
 int issue_processor(int start, int dest, int type){
-    
-    
     struct passenger* animal = int_to_passenger(type);
     floorAssigner(animal, dest);
     
@@ -75,3 +74,36 @@ int issue_processor(int start, int dest, int type){
         printk(KERN_DEBUG "animal or list null\n");
     return 0;
 }
+
+void load_elevator(struct list_head* floor){
+    struct passenger *animal, *tmp;
+    list_for_each_entry_safe(animal, tmp, floors, list_node){
+        if (WEIGHT + animal -> weight <= 100){
+            WEIGHT += animal -> weight;
+            list_del(&animal -> list_node);
+            addAnimal(animal, &elevator_list);
+            printk(KERN_DEBUG "Animal added, type: %c, WEIGHT: %d\n", animal -> type, WEIGHT);
+        }
+    }
+}
+
+void deload_elevator(int floor){
+    floor++; //index to floor
+    struct passenger *animal, *tmp;
+    list_for_each_entry_safe(animal, tmp, &elevator_list, list_node){
+        printk(KERN_DEBUG "animal -> dest: %d\n", animal -> dest);
+        printk(KERN_DEBUG "floor: %d\n", floor);
+        if (animal -> dest == floor){
+            WEIGHT -= animal -> weight;
+            list_del(&animal -> list_node);
+            printk(KERN_DEBUG "Animal dropped off, Type: %c, Destination: %d\n", animal -> type, animal -> dest);
+            SERVICED++;
+            kfree(animal);
+        }
+    }
+}
+
+/*
+ * DeloadFromElevator();
+ * addToElevator();
+ */
