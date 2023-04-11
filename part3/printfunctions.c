@@ -68,6 +68,23 @@ int totalWaiting(void){
     return total;
 }
 
+static ssize_t inElevator(char *buf, int len){
+    struct passenger *pass;
+    struct list_head *pos;
+    int i = 1;
+    len += snprintf(buf + len, BUFSIZE - len, "===============================\n");
+    len += snprintf(buf + len, BUFSIZE - len, "ELEVATOR VIEW\n");  
+    len += snprintf(buf + len, BUFSIZE - len, "-------------------------------\n");
+    list_for_each(pos, &elevator_list){
+        pass = list_entry(pos, struct passenger, list_node);
+        len += snprintf(buf + len, BUFSIZE - len, "%d. Type: %c\n   Dest: %d\n\n", i, pass -> type, pass -> dest);
+        i++;
+    } 
+    len += snprintf(buf + len, BUFSIZE - len, "===============================\n"); 
+
+    return len;
+}
+
 static ssize_t printElevator(char* buf){
     int len = 0;
     
@@ -85,9 +102,9 @@ static ssize_t printElevator(char* buf){
         printk(KERN_DEBUG "TOP OF FOR LOOP len: %d\n", len);
         //Implement this too
         if (i == FLOOR)
-            len += snprintf(buf + len, BUFSIZE - len, "[*] Floor %d: %d ", i, size(&floors[i]));
+            len += snprintf(buf + len, BUFSIZE - len, "[*] Floor %d: %d ", (i + 1), size(&floors[i]));
         else
-            len += snprintf(buf + len, BUFSIZE - len, "[ ] Floor %d: %d ", i, size(&floors[i]));
+            len += snprintf(buf + len, BUFSIZE - len, "[ ] Floor %d: %d ", (i + 1), size(&floors[i]));
         //Implement this
         printk(KERN_DEBUG "len before printList (leaving FOR LOOP): %d\n", len);
         len = printList(buf, len, &floors[i]);
@@ -99,7 +116,7 @@ static ssize_t printElevator(char* buf){
 
     // Build dudes, test print functions
 
+    len = inElevator(buf, len);
     len += snprintf(buf + len, BUFSIZE - len, "\n");
-    
     return len;
 }
