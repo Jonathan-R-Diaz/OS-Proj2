@@ -1,7 +1,11 @@
+obj-y := syscall.o
 obj-m += elevator.o
 
+PWD := $(shell pwd)
+KDIR := /lib/modules/`uname -r`/build
+
 all:
-	make clean; make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules; insmod elevator.ko;
+	$(MAKE) -C $(KDIR) SUBDIR=$(PWD) modules
 
 clean:
-	clear; rmmod elevator; make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean; rm .*~
+	clear; rm -f *.o *.ko *.mod.* Module.* modules.*
