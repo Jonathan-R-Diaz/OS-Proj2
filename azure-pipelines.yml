@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-18.04
+  vmImage: ubuntu-18.04.06
 
 steps:
 - script: echo Hello, world!
